@@ -1,0 +1,10 @@
+{
+  "name": "WorkPay - บันทึกวันทำงานและรายรับ",
+  "short_name": "WorkPay",
+  "description": "ระบบบันทึกวันทำงาน รายรับ และยอดค้างจ่าย",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eaf5ff",
+  "theme_color": "#eaf5ff"
+}

@@ -1,0 +1,371 @@
+<!DOCTYPE html><html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#eaf5ff">
+  <meta name="description" content="WorkPay ระบบบันทึกวันทำงาน รายรับ และยอดค้างจ่าย">
+
+  <title>WorkPay - บันทึกวันทำงานและรายรับ</title>
+
+  <link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="./manifest.json">
+
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+</head>
+<body>  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">🩵</div>
+      <div>
+        <h1>WorkPay</h1>
+        <p>บันทึกวันทำงานและรายรับ</p>
+      </div>
+    </div><button id="themeToggle" class="theme-btn" aria-label="เปลี่ยนธีม">
+  🌙
+</button>
+
+  </header>  <main class="container"><section class="welcome">
+  <div>
+    <p class="eyebrow">MY WORKSPACE</p>
+    <h2>สวัสดีครับ 👋</h2>
+    <p>มาดูสรุปวันทำงานและรายรับของคุณกัน</p>
+  </div>
+  <div class="welcome-icon">💼</div>
+</section>
+
+<nav class="navigation" aria-label="เมนูหลัก">
+  <button class="nav-btn active" data-page="dashboardPage">
+    <span>🏠</span><span>ภาพรวม</span>
+  </button>
+  <button class="nav-btn" data-page="workPage">
+    <span>📝</span><span>บันทึกงาน</span>
+  </button>
+  <button class="nav-btn" data-page="paymentPage">
+    <span>💰</span><span>รับเงิน</span>
+  </button>
+  <button class="nav-btn" data-page="historyPage">
+    <span>📊</span><span>ประวัติ</span>
+  </button>
+</nav>
+
+<!-- หน้า 1: ภาพรวม -->
+<section id="dashboardPage" class="page active">
+  <div class="section-heading">
+    <div>
+      <h2>ภาพรวมของฉัน</h2>
+      <p id="dashboardMonth">สรุปรายรับประจำเดือน</p>
+    </div>
+    <span class="heading-icon">📈</span>
+  </div>
+
+  <div class="stats-grid">
+    <article class="stat-card income-card">
+      <div class="stat-icon">💵</div>
+      <p>รายได้เดือนนี้</p>
+      <h3 id="monthlyIncome">0.00 <small>บาท</small></h3>
+    </article>
+
+    <article class="stat-card work-card">
+      <div class="stat-icon">🗓️</div>
+      <p>วันทำงานเดือนนี้</p>
+      <h3 id="monthlyWorkDays">0 <small>วัน</small></h3>
+    </article>
+
+    <article class="stat-card off-card">
+      <div class="stat-icon">🌤️</div>
+      <p>วันหยุดเดือนนี้</p>
+      <h3 id="monthlyOffDays">0 <small>วัน</small></h3>
+    </article>
+
+    <article class="stat-card paid-card">
+      <div class="stat-icon">💳</div>
+      <p>รับเงินแล้ว</p>
+      <h3 id="totalReceived">0.00 <small>บาท</small></h3>
+    </article>
+  </div>
+
+  <article class="balance-card">
+    <div>
+      <p>💰 เงินค้างจ่ายทั้งหมด</p>
+      <h2 id="outstandingPay">0.00 บาท</h2>
+      <small>รายได้ที่ทำได้แล้ว หักเงินที่ได้รับแล้ว</small>
+    </div>
+    <div class="balance-decoration">฿</div>
+  </article>
+
+  <div class="section-heading quick-heading">
+    <div>
+      <h2>เมนูลัด</h2>
+      <p>เลือกสิ่งที่ต้องการทำ</p>
+    </div>
+  </div>
+
+  <div class="quick-grid">
+    <button class="quick-card" data-go="workPage">
+      <span>📝</span>
+      <strong>บันทึกวันทำงาน</strong>
+      <small>เพิ่มวันทำงานหรือวันหยุด</small>
+    </button>
+
+    <button class="quick-card" data-go="paymentPage">
+      <span>💸</span>
+      <strong>บันทึกรับเงิน</strong>
+      <small>บันทึกเงินที่ได้รับจากผู้รับเหมา</small>
+    </button>
+  </div>
+
+  <div class="notice">
+    <span>💡</span>
+    <p>หน้านี้จะแสดงยอดสรุปจากข้อมูลที่บันทึกไว้ เมื่อเราเพิ่มระบบจัดเก็บข้อมูลแล้ว</p>
+  </div>
+</section>
+
+<!-- หน้า 2: บันทึกวันทำงาน -->
+<section id="workPage" class="page">
+  <div class="section-heading">
+    <div>
+      <h2>บันทึกวันทำงาน</h2>
+      <p>บันทึกค่าแรงประจำวันของคุณ</p>
+    </div>
+    <span class="heading-icon">📝</span>
+  </div>
+
+  <form id="workForm" class="form-card">
+    <div class="field">
+      <label for="workDate">วันที่บันทึก</label>
+      <input type="date" id="workDate" required readonly>
+      <small>ใช้วันที่ปัจจุบันตามเวลาไทย</small>
+    </div>
+
+    <div class="field">
+      <label>สถานะวันนี้</label>
+      <div class="choice-grid">
+        <label class="choice-option">
+          <input type="radio" name="workStatus" value="work" checked>
+          <span>🛠️ ทำงาน</span>
+        </label>
+
+        <label class="choice-option">
+          <input type="radio" name="workStatus" value="off">
+          <span>🌤️ หยุด</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="field" id="wageField">
+      <label for="dailyWage">ค่าแรงวันนี้ (บาท)</label>
+      <input
+        type="number"
+        id="dailyWage"
+        min="0"
+        step="0.01"
+        placeholder="เช่น 500"
+        inputmode="decimal"
+      >
+    </div>
+
+    <div class="field">
+      <label for="workNote">หมายเหตุ (ไม่บังคับ)</label>
+      <textarea id="workNote" rows="3" placeholder="เช่น ทำงานล่วงเวลา..."></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="primary-btn" id="workSubmitBtn">
+        💾 บันทึกวันนี้
+      </button>
+      <button type="button" class="secondary-btn hidden" id="cancelWorkEdit">
+        ยกเลิกการแก้ไข
+      </button>
+    </div>
+
+    <p id="workMessage" class="form-message" aria-live="polite"></p>
+  </form>
+
+  <article class="info-card">
+    <span>🔒</span>
+    <div>
+      <strong>บันทึกวันละหนึ่งรายการ</strong>
+      <p>ระบบจะป้องกันการบันทึกวันซ้ำ และอนุญาตให้แก้ไขรายการเดิมได้</p>
+    </div>
+  </article>
+
+  <div class="section-heading subsection">
+    <div>
+      <h2>รายการล่าสุด</h2>
+      <p>วันทำงานและวันหยุดที่บันทึกไว้</p>
+    </div>
+  </div>
+  <div id="recentWorkList" class="list-container">
+    <div class="empty-state">📋<p>ยังไม่มีข้อมูลวันทำงาน</p></div>
+  </div>
+</section>
+
+<!-- หน้า 3: รับเงิน -->
+<section id="paymentPage" class="page">
+  <div class="section-heading">
+    <div>
+      <h2>รับเงิน / เบิกเงิน</h2>
+      <p>บันทึกเงินที่ได้รับจากผู้รับเหมา</p>
+    </div>
+    <span class="heading-icon">💰</span>
+  </div>
+
+  <div class="payment-balance">
+    <p>ยอดเงินที่ยังรับได้</p>
+    <h2 id="availablePay">0.00 บาท</h2>
+    <small>คำนวณจากค่าแรงสะสม หักเงินที่ได้รับแล้ว</small>
+  </div>
+
+  <form id="paymentForm" class="form-card">
+    <div class="field">
+      <label for="paymentDate">วันที่รับเงิน</label>
+      <input type="date" id="paymentDate" required>
+    </div>
+
+    <div class="field">
+      <label for="paymentAmount">จำนวนเงินที่ได้รับ (บาท)</label>
+      <input
+        type="number"
+        id="paymentAmount"
+        min="0.01"
+        step="0.01"
+        required
+        placeholder="เช่น 1000"
+        inputmode="decimal"
+      >
+    </div>
+
+    <div class="field">
+      <label for="paymentNote">หมายเหตุ (ไม่บังคับ)</label>
+      <textarea id="paymentNote" rows="3" placeholder="เช่น รับเงินงวดแรก..."></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="primary-btn" id="paymentSubmitBtn">
+        💵 บันทึกรับเงิน
+      </button>
+      <button type="button" class="secondary-btn hidden" id="cancelPaymentEdit">
+        ยกเลิกการแก้ไข
+      </button>
+    </div>
+
+    <p id="paymentMessage" class="form-message" aria-live="polite"></p>
+  </form>
+
+  <div class="section-heading subsection">
+    <div>
+      <h2>ประวัติการรับเงิน</h2>
+      <p>รายการเงินที่ได้รับจากผู้รับเหมา</p>
+    </div>
+  </div>
+
+  <div id="paymentHistory" class="list-container">
+    <div class="empty-state">💸<p>ยังไม่มีประวัติการรับเงิน</p></div>
+  </div>
+</section>
+
+<!-- หน้า 4: ประวัติ -->
+<section id="historyPage" class="page">
+  <div class="section-heading">
+    <div>
+      <h2>ประวัติและสรุป</h2>
+      <p>ตรวจสอบข้อมูลย้อนหลังรายเดือน</p>
+    </div>
+    <span class="heading-icon">📊</span>
+  </div>
+
+  <article class="filter-card">
+    <div class="field">
+      <label for="historyMonth">เลือกเดือนที่ต้องการดู</label>
+      <input type="month" id="historyMonth">
+    </div>
+    <button id="showAllHistory" type="button" class="secondary-btn">
+      ดูเดือนปัจจุบัน
+    </button>
+  </article>
+
+  <div class="summary-grid">
+    <article class="summary-box">
+      <span>🛠️</span>
+      <p>วันทำงาน</p>
+      <h3 id="historyWorkDays">0 วัน</h3>
+    </article>
+    <article class="summary-box">
+    <span>💵</span>
+    <p>รายได้</p>
+    <h3 id="historyIncome">0.00 บาท</h3>
+</article>
+
+<article class="summary-box">
+    <span>💳</span>
+    <p>รับเงินแล้ว</p>
+    <h3 id="historyReceived">0.00 บาท</h3>
+</article>
+
+<article class="summary-box">
+    <span>🧾</span>
+    <p>ยอดค้างจ่าย</p>
+    <h3 id="historyOutstanding">0.00 บาท</h3>
+</article>
+</div>
+
+  <div class="section-heading subsection">
+    <div>
+      <h2>ประวัติวันทำงาน</h2>
+      <p>รายการของเดือนที่เลือก</p>
+    </div>
+  </div>
+  <div id="historyWorkList" class="list-container">
+    <div class="empty-state">📋<p>ยังไม่มีข้อมูล</p></div>
+  </div>
+
+  <div class="section-heading subsection">
+    <div>
+      <h2>ประวัติรับเงิน</h2>
+      <p>รายการรับเงินของเดือนที่เลือก</p>
+    </div>
+  </div>
+  <div id="historyPaymentList" class="list-container">
+    <div class="empty-state">💰<p>ยังไม่มีข้อมูล</p></div>
+  </div>
+  <!-- ระบบสำรองและกู้คืนข้อมูล -->
+<div class="card backup-card">
+    <h2>🛡️ สำรองและกู้คืนข้อมูล</h2>
+
+    <p>
+        สำรองข้อมูลวันทำงานและประวัติรับเงิน
+        เพื่อป้องกันข้อมูลสูญหาย
+    </p>
+
+    <button type="button" id="exportBackupBtn">
+        📤 ดาวน์โหลดไฟล์สำรอง
+    </button>
+
+    <hr>
+
+    <label for="importBackupFile">
+        📥 เลือกไฟล์สำรองเพื่อนำเข้าข้อมูล
+    </label>
+
+    <input
+        type="file"
+        id="importBackupFile"
+        accept=".json,application/json"
+    >
+
+    <button type="button" id="importBackupBtn">
+        📥 กู้คืนข้อมูล
+    </button>
+
+    <p id="backupMessage" role="status"></p>
+</div>
+</section>
+
+<footer>
+  <p>🩵 WorkPay</p>
+  <small>บันทึกวันทำงานและรายรับของคุณอย่างเป็นระบบ</small>
+</footer>
+
+  </main>  <div id="toast" class="toast" role="status" aria-live="polite"></div>  <script src="script.js"></script></body>
+</html>
